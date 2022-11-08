@@ -13,6 +13,7 @@ class BlackJack:
         for i in range(0,self.numberPlayers):
             self.playerArray.append(self.newPlayer(str(i)))
         self.deck.shuffle()
+        self.dealer = Dealer()
 
     def newPlayer(self, name):
         newPlayer = Player(name, [], 100, 100)
@@ -21,15 +22,35 @@ class BlackJack:
     def deal(self):
         for i in range(0,2):
             for j in range(0,len(self.playerArray)):
-                self.playerArray[j].addCard(self.deck.draw())
+                self.playerArray[j].addCard(self.deck.draw())  #Deal cards to players
+            self.dealer.addCard(self.deck.draw())
+            
+    def hit(self, player):
+        player.addCard(self.deck.draw())
+    
+    def dealerPlayOut(self):
+        while(self.dealer.getHandValue()<17):
+            self.hit(self.dealer)
+
+    def playerPlayOut(self):
+        print()
 
     def toString(self):
         myStr = ""
+        myStr += "Dealer: "
+        myStr += " (Value "
+        myStr += str(self.dealer.getHandValue())
+        myStr += ")\n"
+        myStr += self.dealer.toString()
         for i in range(0, len(self.playerArray)):
-            myStr += "Player: "
+            myStr += "\nPlayer: "
             myStr += str(i)
-            myStr += "\n"
+            myStr += " (Value "
+            myStr += str(self.playerArray[i].getHandValue())
+            myStr += ")\n"
             myStr += self.playerArray[i].toString()
             myStr += "\n"
         return myStr
+
+        
         
